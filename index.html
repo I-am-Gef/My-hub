@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My Hub</title>
+<style>
+:root{--bg:#f6f5f1;--fg:#1d1d1b;--card:#fff;--mut:#6f6e68;--line:#e2e0d8;--acc:#2f6fed;--warn:#c2410c;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17171a;--fg:#ececea;--card:#212125;--mut:#9a9a94;--line:#33333a;--acc:#6b9bff;--warn:#fb923c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17171a;--fg:#ececea;--card:#212125;--mut:#9a9a94;--line:#33333a;--acc:#6b9bff;--warn:#fb923c;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--line);padding:16px 10px;position:sticky;top:0;height:100vh;overflow:auto}
+aside h1{font-size:17px;margin:0 8px 12px}
+.nav{display:flex;justify-content:space-between;width:100%;text-align:left;background:none;border:0;color:var(--fg);padding:7px 10px;border-radius:8px;cursor:pointer;font:inherit}
+.nav:hover{background:var(--line)}.nav.on{background:var(--acc);color:#fff}.nav span:last-child{opacity:.7;font-size:12px}
+main{padding:20px;max-width:900px;width:100%}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+input,select,textarea,button{font:inherit;color:var(--fg)}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.bar input{flex:1;min-width:160px;width:auto}
+.btn{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn:hover{border-color:var(--acc)}.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}
+h2{margin:6px 0 2px;font-size:20px}.sub{color:var(--mut);margin:0 0 14px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px}
+.card.done{opacity:.55}
+.t{display:flex;gap:8px;align-items:baseline;justify-content:space-between}
+.t a{color:var(--fg);font-weight:600;text-decoration:none;word-break:break-word}.t a:hover{color:var(--acc)}
+.dom{color:var(--mut);font-size:12px}
+.why{margin:4px 0;color:var(--fg)}.why:empty{display:none}
+.meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;font-size:12px}
+.b{border:1px solid var(--line);border-radius:99px;padding:1px 9px;background:none;cursor:pointer;color:var(--mut)}
+.b.s{color:var(--acc);border-color:var(--acc)}.stale{color:var(--warn);border-color:var(--warn)}
+.act{display:flex;gap:2px}.act button{background:none;border:0;cursor:pointer;padding:2px 6px;border-radius:6px;font-size:15px}.act button:hover{background:var(--line)}
+.empty{color:var(--mut);text-align:center;padding:40px 10px}
+dialog{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:14px;width:min(520px,94vw);padding:18px}
+dialog::backdrop{background:#0008}
+label{display:block;font-size:12px;color:var(--mut);margin:10px 0 3px}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--fg);font-size:14px}.chk input{width:auto}
+
+</style><link rel="stylesheet" href="extra.css"><link rel="stylesheet" href="mobile.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#2f6fed"></head><body>
+<div class="app"><aside id="side"></aside><main>
+<div class="bar"><input id="q" placeholder="Search title, note, tag, URL…">
+<button class="btn p" data-a="new">+ Add</button><button class="btn" data-a="bk">💾 Backup</button></div>
+<div id="head"></div><div id="list"></div></main></div>
+
+<dialog id="dEdit"><h3 id="eT" style="margin:0">Link</h3>
+<label>URL</label><input id="eU" placeholder="https://…">
+<label>Title</label><input id="eN">
+<label>Why did I open this? / what is it for</label><textarea id="eW" rows="3"></textarea>
+<label>Collection</label><select id="eC"></select>
+<label>Status</label><select id="eS"><option value="todo">To do / read</option><option value="doing">In progress</option><option value="ref">Reference</option><option value="done">Done</option></select>
+<label>Tags (comma separated)</label><input id="eG">
+<label>Installed version (optional, for software)</label><input id="eV">
+<div class="chk"><input type="checkbox" id="eD"><span>☀️ Show in Today (daily check)</span></div>
+<div class="row"><button class="btn" data-a="close">Cancel</button><button class="btn p" data-a="save">Save</button></div></dialog>
+
+<dialog id="dPaste"><h3 style="margin:0">Paste tabs</h3><p class="sub">One URL per line. Tip: a tab-export extension can copy all open tabs as a list.</p>
+<textarea id="pT" rows="9" placeholder="https://…&#10;https://…"></textarea>
+<label>Send to</label><select id="pC"></select>
+<div class="row"><button class="btn" data-a="close">Cancel</button><button class="btn p" data-a="doPaste">Import</button></div></dialog>
+
+<dialog id="dBack"><h3 style="margin:0">Backup</h3><p class="sub">Data lives only in this browser. Copy this text somewhere safe; paste a saved copy back to restore.</p>
+<textarea id="bT" rows="9"></textarea>
+<div class="row"><button class="btn" data-a="close">Close</button><button class="btn" data-a="copy">Copy</button><button class="btn p" data-a="restore">Replace data with this text</button></div></dialog>
+
+<dialog id="dAsk"><h3 id="aT" style="margin:0"></h3><p class="sub" id="aM"></p><input id="aI"><div class="row"><button class="btn" id="aNo">Cancel</button><button class="btn p" id="aOk">OK</button></div></dialog>
+
+<script src="shim.js"></script><script src="store.js"></script><script src="core.js"></script><script src="check.js"></script><script src="extra.js"></script><script src="ui.js"></script><script src="backup.js"></script><script src="lists.js"></script><script src="more.js"></script><script src="viewer.js"></script><script src="gallery.js"></script><script src="tools2.js"></script><script src="shell.js"></script><script src="share.js"></script><script>if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script></body></html>

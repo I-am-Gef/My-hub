@@ -1,0 +1,6 @@
+@media(max-width:700px){
+ .app{grid-template-columns:1fr!important}
+ body:not(.sbh) aside{position:fixed;z-index:50;left:0;top:0;width:82vw;max-width:320px;height:100vh;background:var(--bg);box-shadow:4px 0 24px #0006}
+ body.sbh aside{display:none}
+ main{padding:12px!important}
+}
